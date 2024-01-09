@@ -4,7 +4,7 @@ const Employee = require('./model/employeSchema');
 
 const app = express();
 const PORT = 8000;
-
+app.use(express.json());
 mongoose.connect('mongodb://localhost:27017/employeeDetails', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -13,12 +13,13 @@ mongoose.connect('mongodb://localhost:27017/employeeDetails', {
 app.get('/empSchema', async (req, res) => {
   try {
     const employees = await Employee.find({});
-    
 
-    const formattedData = employees.map(employee => 
-      `emp-cod: ${employee.emp_code}, Empname: ${employee.emp_name}, Salary: ${employee.salary}`
-    ).join('\n');
-
+    const formattedData = employees
+      .map(
+        (employee) =>
+          `emp-cod: ${employee.emp_code}, Empname: ${employee.emp_name}, Salary: ${employee.salary}`
+      )
+      .join('\n');
 
     res.type('text').send(formattedData);
   } catch (error) {
